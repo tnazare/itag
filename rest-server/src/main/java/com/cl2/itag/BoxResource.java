@@ -12,6 +12,8 @@ import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
 import java.net.URI;
 
+import static javax.ws.rs.client.Entity.entity;
+
 
 @Path("box")
 @Singleton
@@ -53,13 +55,27 @@ public class BoxResource {
     }
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/edit/{input}")
+    @Path("/edit")
     public Response edit(@FormParam("input") String input) {
         Response response;
-        URI uri = uriInfo.getAbsolutePath();
-        response = Response.created(uri).build();
+        ObjectMapper mapper = new ObjectMapper();
+        Box inputBox = null;
+
+        try {
+            inputBox = mapper.readValue(input,Box.class);
+        } catch (IOException e) {
+            System.err.println("erreur lors de la deserialization");
+        }
+
+        if(inputBox != null && inputBox.getId() != 0 && inputBox.getId() == 12){
+            response = Response.ok().entity(inputBox).build();
+        }
+        else{
+            response = Response.noContent().build();
+        }
+
         return response;
     }
 

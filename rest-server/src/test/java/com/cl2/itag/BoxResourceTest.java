@@ -3,6 +3,7 @@ package com.cl2.itag;
 
 import com.cl2.itag.model.Box;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.restassured.http.ContentType;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.junit.After;
 import org.junit.Before;
@@ -62,7 +63,7 @@ public class BoxResourceTest {
     }
 
     @Test
-    public void should_create_a_box_with_valid_data() {
+    public void should_create_a_box_with_valid_box() {
         Box boxet = new Box();
         boxet.setId(12);
         List<String> contentList = new ArrayList<String>();
@@ -80,16 +81,15 @@ public class BoxResourceTest {
             System.err.println("erreur lors de la serialization");
         }
 
-        System.out.println("http://localhost:8080/myapp/box/create/" + boxet_serialized);
         given().log().all()
                 .expect().statusCode(Response.Status.CREATED.getStatusCode()).body(containsString(String.valueOf(boxet.getId())))
-                .put("http://localhost:8080/myapp/box/create/" + boxet_serialized);
+                .put(Main.BASE_URI+"/box/create/" + boxet_serialized);
 
 
     }
 
     @Test
-    public void should_not_create_a_box_with_invalid_data() {
+    public void should_not_create_a_box_with_invalid_box() {
         Box boxet = new Box();
         boxet.setId(12);
         boxet.setContent(new ArrayList<String>(Arrays.asList("tasses", "mugs", "plates")));
@@ -104,10 +104,52 @@ public class BoxResourceTest {
         }
 
         boxet_serialized = boxet_serialized.substring(1,4);
-        System.out.println("http://localhost:8080/myapp/box/create/" + boxet_serialized);
 
-        expect().statusCode(Response.Status.NO_CONTENT.getStatusCode())
-                .given()
-                .put("http://localhost:8080/myapp/box/create/" + boxet_serialized);
+        given().log().all()
+        .expect().statusCode(Response.Status.NO_CONTENT.getStatusCode())
+                .put(Main.BASE_URI + "/box/create/" + boxet_serialized);
+    }
+
+    @Test
+    public void should_update_a_box_with_an_existing_box() {
+        Box boxet = new Box();
+        boxet.setId(12);
+        boxet.setContent(new ArrayList<String>(Arrays.asList("tasses", "mugs", "plates")));
+        boxet.setCreationDate(new Date());
+        boxet.setLastUpdateDate(new Date());
+
+        ObjectMapper serializer = new ObjectMapper();
+        String boxet_serialized = null;
+        try {
+            boxet_serialized = serializer.writerWithType(Box.class).writeValueAsString(boxet);
+        } catch (IOException e) {
+            System.err.println("erreur lors de la serialization");
+        }
+
+
+        given().log().all().formParameter("input", boxet_serialized).contentType(ContentType.URLENC)
+                .expect().statusCode(Response.Status.OK.getStatusCode()).body(containsString(String.valueOf(boxet.getId())))
+                .post(Main.BASE_URI + "box/edit");
+    }
+
+    @Test
+    public void should_not_update_a_box_with_a_non_existing_box() {
+        Box boxet = new Box();
+        boxet.setId(11);
+        boxet.setContent(new ArrayList<String>(Arrays.asList("tasses", "mugs", "plates")));
+        boxet.setCreationDate(new Date());
+        boxet.setLastUpdateDate(new Date());
+
+        ObjectMapper serializer = new ObjectMapper();
+        String boxet_serialized = null;
+        try {
+            boxet_serialized = serializer.writerWithType(Box.class).writeValueAsString(boxet);
+        } catch (IOException e) {
+            System.err.println("erreur lors de la serialization");
+        }
+
+        given().log().all().formParameter("input",boxet_serialized).contentType(ContentType.URLENC)
+            .expect().statusCode(Response.Status.NO_CONTENT.getStatusCode())
+            .post(Main.BASE_URI + "box/edit");
     }
 }
