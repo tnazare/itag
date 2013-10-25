@@ -1,9 +1,7 @@
 package com.cl2.itag.model;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.Date;
 import java.util.List;
-
 
 
 public class Box {
