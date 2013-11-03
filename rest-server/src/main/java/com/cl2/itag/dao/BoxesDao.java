@@ -5,11 +5,8 @@ import com.cl2.itag.model.Box;
 import com.cl2.itag.model.ContentElement;
 
 import java.util.List;
-import java.util.Map;
 
 public interface BoxesDao {
-
-
 
 
     public Box createBox(Box box);
@@ -20,6 +17,6 @@ public interface BoxesDao {
 
     public Box updateBox(Box box);
 
-    public Box deleteBox(Box box) ;
+    public Box deleteBox(Box box);
 
 }

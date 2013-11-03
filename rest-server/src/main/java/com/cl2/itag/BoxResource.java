@@ -12,8 +12,6 @@ import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
 import java.net.URI;
 
-import static javax.ws.rs.client.Entity.entity;
-
 
 @Path("box")
 @Singleton
@@ -38,16 +36,15 @@ public class BoxResource {
         Box inputBox = null;
 
         try {
-            inputBox = mapper.readValue(input,Box.class);
+            inputBox = mapper.readValue(input, Box.class);
         } catch (IOException e) {
             System.err.println("erreur lors de la deserialization");
         }
 
         URI uri = uriInfo.getAbsolutePath();
-        if(inputBox != null && inputBox.getId() != 0 ){
+        if (inputBox != null && inputBox.getId() != 0) {
             response = Response.created(uri).entity(inputBox).build();
-        }
-        else{
+        } else {
             response = Response.noContent().build();
         }
 
@@ -64,15 +61,14 @@ public class BoxResource {
         Box inputBox = null;
 
         try {
-            inputBox = mapper.readValue(input,Box.class);
+            inputBox = mapper.readValue(input, Box.class);
         } catch (IOException e) {
             System.err.println("erreur lors de la deserialization");
         }
 
-        if(inputBox != null && inputBox.getId() != 0 && inputBox.getId() == 12){
+        if (inputBox != null && inputBox.getId() != 0 && inputBox.getId() == 12) {
             response = Response.ok().entity(inputBox).build();
-        }
-        else{
+        } else {
             response = Response.noContent().build();
         }
 

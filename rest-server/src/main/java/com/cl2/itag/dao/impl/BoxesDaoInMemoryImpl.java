@@ -7,15 +7,15 @@ import com.cl2.itag.model.ContentElement;
 
 import java.util.*;
 
-public class BoxesDaoInMemoryImpl implements BoxesDao{
+public class BoxesDaoInMemoryImpl implements BoxesDao {
 
-    private static Map<Long,Box> dataObject = new HashMap<Long,Box>();
+    private static Map<Long, Box> dataObject = new HashMap<Long, Box>();
 
     @Override
     public Box createBox(Box box) {
         Long nextLong = Long.valueOf(dataObject.size() + 1);
         box.setId(nextLong);
-        dataObject.put(box.getId(),box);
+        dataObject.put(box.getId(), box);
         return box;
     }
 
@@ -27,9 +27,9 @@ public class BoxesDaoInMemoryImpl implements BoxesDao{
     @Override
     public List<Box> searchBoxesByContent(List<ContentElement> matchingContentElements) {
         Set<Box> boxesToReturn = new HashSet<Box>();
-        for (Box boxUnit : dataObject.values()){
-            for(ContentElement matchingContentElement : matchingContentElements){
-                if(boxUnit.getContentList().containsContentElement(matchingContentElement)){
+        for (Box boxUnit : dataObject.values()) {
+            for (ContentElement matchingContentElement : matchingContentElements) {
+                if (boxUnit.getContentList().containsContentElement(matchingContentElement)) {
                     boxesToReturn.add(boxUnit);
                 }
             }
@@ -39,7 +39,7 @@ public class BoxesDaoInMemoryImpl implements BoxesDao{
 
     @Override
     public Box updateBox(Box box) {
-        return dataObject.put(box.getId(),box);
+        return dataObject.put(box.getId(), box);
     }
 
     @Override

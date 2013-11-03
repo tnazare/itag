@@ -3,7 +3,6 @@ package com.cl2.itag.model;
 import com.google.common.base.Objects;
 
 import java.util.Date;
-import java.util.List;
 
 
 public class Box {
