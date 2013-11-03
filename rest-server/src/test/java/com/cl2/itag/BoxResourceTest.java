@@ -2,6 +2,8 @@ package com.cl2.itag;
 
 
 import com.cl2.itag.model.Box;
+import com.cl2.itag.model.ContentElement;
+import com.cl2.itag.model.ContentElementList;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.restassured.http.ContentType;
 import org.glassfish.grizzly.http.server.HttpServer;
@@ -64,14 +66,12 @@ public class BoxResourceTest {
 
     @Test
     public void should_create_a_box_with_valid_box() {
-        Box boxet = new Box();
+
+        ContentElementList contentList = new ContentElementList();
+        contentList.addContentElement(new ContentElement("plates"," 7white plates"));
+        contentList.addContentElement(new ContentElement("mugs","2 red light district mugs"));
+        Box boxet = new Box(contentList,new Date(), null, null);
         boxet.setId(12);
-        List<String> contentList = new ArrayList<String>();
-        contentList.add("plates");
-        contentList.add("mugs");
-        contentList.add("tasses");
-        boxet.setContent(contentList);
-        boxet.setCreationDate(new Date());
 
         ObjectMapper serializer = new ObjectMapper();
         String boxet_serialized = null;
@@ -90,10 +90,11 @@ public class BoxResourceTest {
 
     @Test
     public void should_not_create_a_box_with_invalid_box() {
-        Box boxet = new Box();
+        ContentElementList contentList = new ContentElementList();
+        contentList.addContentElement(new ContentElement("plates"," 7white plates"));
+        contentList.addContentElement(new ContentElement("mugs","2 red light district mugs"));
+        Box boxet = new Box(contentList,new Date(), null, null);
         boxet.setId(12);
-        boxet.setContent(new ArrayList<String>(Arrays.asList("tasses", "mugs", "plates")));
-        boxet.setCreationDate(new Date());
 
         ObjectMapper serializer = new ObjectMapper();
         String boxet_serialized = null;
@@ -112,11 +113,11 @@ public class BoxResourceTest {
 
     @Test
     public void should_update_a_box_with_an_existing_box() {
-        Box boxet = new Box();
+        ContentElementList contentList = new ContentElementList();
+        contentList.addContentElement(new ContentElement("plates"," 7white plates"));
+        contentList.addContentElement(new ContentElement("mugs","2 red light district mugs"));
+        Box boxet = new Box(contentList,new Date(), null, null);
         boxet.setId(12);
-        boxet.setContent(new ArrayList<String>(Arrays.asList("tasses", "mugs", "plates")));
-        boxet.setCreationDate(new Date());
-        boxet.setLastUpdateDate(new Date());
 
         ObjectMapper serializer = new ObjectMapper();
         String boxet_serialized = null;
@@ -134,11 +135,11 @@ public class BoxResourceTest {
 
     @Test
     public void should_not_update_a_box_with_a_non_existing_box() {
-        Box boxet = new Box();
+        ContentElementList contentList = new ContentElementList();
+        contentList.addContentElement(new ContentElement("plates"," 7white plates"));
+        contentList.addContentElement(new ContentElement("mugs","2 red light district mugs"));
+        Box boxet = new Box(contentList,new Date(), null, null);
         boxet.setId(11);
-        boxet.setContent(new ArrayList<String>(Arrays.asList("tasses", "mugs", "plates")));
-        boxet.setCreationDate(new Date());
-        boxet.setLastUpdateDate(new Date());
 
         ObjectMapper serializer = new ObjectMapper();
         String boxet_serialized = null;
